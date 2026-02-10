@@ -3198,7 +3198,7 @@ export const aiToolsDatabase: Tool[] = [
     pricing: "Free",
     rating: 4.6,
     reviewCount: 2100
-  }
+  },
 
   {
     id: "241",
