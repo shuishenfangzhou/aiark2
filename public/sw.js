@@ -1,3 +1,5 @@
+/* global self, caches, fetch, Response, URL */
+
 // Service Worker for AI 工具导航
 // Minimal cache-first strategy for static assets.
 

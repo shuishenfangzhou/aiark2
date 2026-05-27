@@ -826,7 +826,7 @@ export const aiToolsDatabase: Tool[] = [
     name: "Runway Gen-2",
     chineseName: "Runway Gen-2",
     description: "革命性的AI视频生成模型，支持文本生成视频、图像生成视频等多种模式。",
-    url: "https://runwayml.com",
+    url: "https://runwayml.com/gen-2",
     icon: "https://core-normal.traeapi.us/api/ide/v1/text_to_image?prompt=Runway%20Gen-2%20logo%20minimalist%20black%20icon%20professional&image_size=square",
     category: "AI视频工具",
     tags: ["付费", "视频生成", "高质量", "专业级"],
@@ -1696,7 +1696,7 @@ export const aiToolsDatabase: Tool[] = [
   },
   {
     id: "127",
-    name: "Minimax",
+    name: "海螺AI",
     chineseName: "海螺AI",
     description: "MiniMax推出的通用人工智能助手，提供高效的信息获取和处理能力。",
     url: "https://hailuo.ai",
@@ -2280,20 +2280,7 @@ export const aiToolsDatabase: Tool[] = [
   },
 
   // =============== AI搜索引擎 (10个) ===============
-  {
-    id: "171",
-    name: "Perplexity",
-    chineseName: "Perplexity",
-    description: "结合了ChatGPT式对话和实时搜索的AI引擎，提供准确答案和引用。",
-    url: "https://www.perplexity.ai",
-    icon: "https://core-normal.traeapi.us/api/ide/v1/text_to_image?prompt=Perplexity%20logo%20minimalist%20icon%20professional&image_size=square",
-    category: "AI搜索引擎",
-    tags: ["免费", "搜索", "引用", "实时"],
-    pricing: "Freemium",
-    rating: 4.8,
-    reviewCount: 5670,
-    featured: true
-  },
+
   {
     id: "172",
     name: "Bing Chat",
@@ -2791,7 +2778,7 @@ export const aiToolsDatabase: Tool[] = [
     name: "Stable Beluga",
     chineseName: "Stable Beluga",
     description: "Stability AI推出的微调模型，基于Llama 2，在推理能力上有所提升。",
-    url: "https://stability.ai",
+    url: "https://stability.ai/models/stable-beluga",
     icon: "https://core-normal.traeapi.us/api/ide/v1/text_to_image?prompt=Stable%20Beluga%20logo%20whale%20icon%20professional&image_size=square",
     category: "AI训练模型",
     tags: ["免费", "开源", "微调", "推理"],
@@ -3290,19 +3277,7 @@ export const aiToolsDatabase: Tool[] = [
     rating: 4.9,
     reviewCount: 773
   },
-  {
-    id: "247",
-    name: "01Agent",
-    chineseName: "01Agent",
-    description: "AI图文创作工具，支持生成、排版、编辑、发布",
-    url: "https://ai-bot.cn/sites/69212.html",
-    icon: "https://ai-bot.cn/wp-content/uploads/2025/12/01Agent-logo.png",
-    category: "AI写作工具",
-    tags: ["免费", "热门"],
-    pricing: "Freemium",
-    rating: 4.6,
-    reviewCount: 915
-  },
+
   {
     id: "248",
     name: "Paperpal",
@@ -3589,19 +3564,7 @@ export const aiToolsDatabase: Tool[] = [
     rating: 4.1,
     reviewCount: 1504
   },
-  {
-    id: "270",
-    name: "QuillBot",
-    chineseName: "QuillBot",
-    description: "AI英/德语写作润色和改进工具",
-    url: "https://try.quillbot.com/6eqrqpoysmlh",
-    icon: "https://ai-bot.cn/wp-content/uploads/2023/03/quillbot-icon.png",
-    category: "AI写作工具",
-    tags: ["免费", "热门"],
-    pricing: "Freemium",
-    rating: 4.8,
-    reviewCount: 4789
-  },
+
   {
     id: "271",
     name: "即梦AI",
@@ -4057,19 +4020,7 @@ export const aiToolsDatabase: Tool[] = [
     rating: 4.3,
     reviewCount: 2144
   },
-  {
-    id: "306",
-    name: "码上飞",
-    chineseName: "码上飞",
-    description: "一句话生成微信小程序、APP、H5网页",
-    url: "https://ai-bot.cn/sites/60995.html",
-    icon: "https://ai-bot.cn/wp-content/uploads/2025/11/CodeFlying-icon-1.png",
-    category: "AI智能体",
-    tags: ["免费", "热门"],
-    pricing: "Freemium",
-    rating: 4.9,
-    reviewCount: 1112
-  },
+
   {
     id: "307",
     name: "金灵AI",
@@ -4395,19 +4346,7 @@ export const aiToolsDatabase: Tool[] = [
     rating: 4.5,
     reviewCount: 543
   },
-  {
-    id: "332",
-    name: "Flowith",
-    chineseName: "Flowith",
-    description: "一站式使用GPT-5、Claude、Gemini",
-    url: "https://ai-bot.cn/sites/11395.html",
-    icon: "https://ai-bot.cn/wp-content/uploads/2024/04/flowith-icon.png",
-    category: "AI聊天助手",
-    tags: ["免费", "热门"],
-    pricing: "Freemium",
-    rating: 4.4,
-    reviewCount: 2625
-  },
+
   {
     id: "333",
     name: "逗逗AI",
@@ -4577,19 +4516,7 @@ export const aiToolsDatabase: Tool[] = [
     rating: 4.8,
     reviewCount: 405
   },
-  {
-    id: "346",
-    name: "书生大模型",
-    chineseName: "书生大模型",
-    description: "上海人工智能实验室推出的系列AI模型",
-    url: "https://ai-bot.cn/sites/53308.html",
-    icon: "https://ai-bot.cn/wp-content/uploads/2025/06/shusheng-logo.png",
-    category: "AI聊天助手",
-    tags: ["免费", "热门"],
-    pricing: "Freemium",
-    rating: 4.3,
-    reviewCount: 4915
-  },
+
   {
     id: "347",
     name: "阶跃AI",
@@ -4681,19 +4608,7 @@ export const aiToolsDatabase: Tool[] = [
     rating: 4.7,
     reviewCount: 3957
   },
-  {
-    id: "354",
-    name: "秒哒",
-    chineseName: "秒哒",
-    description: "无代码AI应用开发平台，一句话做应用",
-    url: "https://ai-bot.cn/sites/65909.html",
-    icon: "https://ai-bot.cn/wp-content/uploads/2025/02/miaoda-logo.png",
-    category: "AI编程工具",
-    tags: ["免费", "热门"],
-    pricing: "Freemium",
-    rating: 4.4,
-    reviewCount: 4682
-  },
+
   {
     id: "355",
     name: "代码小浣熊",
@@ -5071,19 +4986,7 @@ export const aiToolsDatabase: Tool[] = [
     rating: 4.5,
     reviewCount: 3648
   },
-  {
-    id: "384",
-    name: "讯飞星辰Agent",
-    chineseName: "讯飞星辰Agent",
-    description: "AI智能体开发平台",
-    url: "https://ai-bot.cn/sites/50068.html",
-    icon: "https://ai-bot.cn/wp-content/uploads/2025/04/xunfei-xingchen-agent-logo-1.jpg",
-    category: "AI开发平台",
-    tags: ["免费", "热门"],
-    pricing: "Freemium",
-    rating: 4.3,
-    reviewCount: 937
-  },
+
   {
     id: "385",
     name: "BigModel",
@@ -5097,19 +5000,7 @@ export const aiToolsDatabase: Tool[] = [
     rating: 4.9,
     reviewCount: 3624
   },
-  {
-    id: "386",
-    name: "AI Ping",
-    chineseName: "AI Ping",
-    description: "大模型服务评测与API调用平台",
-    url: "https://ai-bot.cn/sites/61493.html",
-    icon: "https://ai-bot.cn/wp-content/uploads/2025/09/AI-Ping-logo.png",
-    category: "AI开发平台",
-    tags: ["免费", "热门"],
-    pricing: "Freemium",
-    rating: 4.7,
-    reviewCount: 2891
-  },
+
   {
     id: "387",
     name: "ZenMux",
@@ -6813,19 +6704,7 @@ export const aiToolsDatabase: Tool[] = [
     rating: 4.3,
     reviewCount: 4495
   },
-  {
-    id: "518",
-    name: "Codex",
-    chineseName: "Codex",
-    description: "OpenAI推出的AI编程模型和工具",
-    url: "https://openai.com/index/codex-now-generally-available",
-    icon: "https://ai-bot.cn/wp-content/uploads/2026/02/Codex-logo.png",
-    category: "AI训练模型",
-    tags: ["免费", "热门"],
-    pricing: "Freemium",
-    rating: 4.8,
-    reviewCount: 1311
-  },
+
   {
     id: "519",
     name: "讯飞星辰MaaS",

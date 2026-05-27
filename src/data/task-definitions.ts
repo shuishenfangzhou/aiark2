@@ -199,10 +199,10 @@ export function assignTaskTags(
  * Filter tools by a task value.
  * If task is "all", returns all tools.
  */
-export function filterByTask(tools: any[], task: string): any[] {
+export function filterByTask<T extends { taskTags?: string[] }>(tools: T[], task: string): T[] {
   if (task === "all") return tools;
   return tools.filter(t =>
-    t.taskTags && t.taskTags.includes(task)
+    Array.isArray(t.taskTags) && t.taskTags.includes(task)
   );
 }
 
