@@ -1,9 +1,9 @@
 import { ToolCard } from "@/components/tool-card";
-import { tools } from "@/data/tools";
+import { comprehensiveTools } from "@/data/comprehensive-tools";
 import { Star } from "lucide-react";
 
 export function FeaturedTools() {
-  const featuredTools = tools.filter(tool => 
+  const featuredTools = comprehensiveTools.filter(tool => 
     tool.tags.includes("热门") || tool.tags.includes("GPT-4")
   ).slice(0, 6);
 

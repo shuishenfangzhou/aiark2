@@ -36,9 +36,15 @@ yarn-error.log*
 # vercel
 .vercel
 
+# link check reports
+/reports
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
-.vercel
+# misc root artifacts
+ai_tools_raw.html
+*优化分析报告.md
+
 .env*.local

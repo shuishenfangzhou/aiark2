@@ -1,23 +1,34 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from "vite-tsconfig-paths";
-// import { traeBadgePlugin } from 'vite-plugin-trae-solo-badge';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    // traeBadgePlugin({
-    //   variant: 'dark',
-    //   position: 'bottom-right',
-    //   prodOnly: true,
-    //   clickable: true,
-    //   clickUrl: 'https://www.trae.ai/solo?showJoin=1',
-    //   autoTheme: true,
-    //   autoThemeTarget: '#root'
-    // }), 
     tsconfigPaths(),
   ],
+
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split vendor libraries into separate chunks
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-ui': ['lucide-react', 'class-variance-authority', 'clsx', 'tailwind-merge'],
+          'vendor-radix': ['radix-ui'],
+        },
+      },
+    },
+    // Increase chunk size warning limit (500 kB -> 1000 kB)
+    chunkSizeWarningLimit: 1000,
+    // Enable source maps for production debugging
+    sourcemap: false,
+    // Optimize CSS
+    cssMinify: true,
+    // Minify with esbuild (faster than terser)
+    minify: 'esbuild',
+  },
   server: {
     proxy: {
       '/api': {

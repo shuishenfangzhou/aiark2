@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { 
   Menu, 
   Hash, 
-  Flame, 
   PenTool, 
   Image as ImageIcon, 
   Video, 
@@ -19,7 +18,6 @@ import {
   Bot, 
   Mic, 
   Palette, 
-  Cpu, 
   GraduationCap, 
   ShieldCheck,
   LayoutGrid,

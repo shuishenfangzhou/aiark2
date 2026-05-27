@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Filter, X } from "lucide-react";
+import { Search, Filter, X, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,6 +17,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
+import { TaskFilter } from "@/components/task-filter";
+import { TASK_DEFINITIONS, getTaskLabel } from "@/data/task-definitions";
 
 interface AdvancedSearchProps {
   searchQuery: string;
@@ -27,11 +29,16 @@ interface AdvancedSearchProps {
   onPricingChange: (pricing: string) => void;
   selectedSort: string;
   onSortChange: (sort: string) => void;
+  selectedTask?: string;
+  onTaskChange?: (task: string) => void;
   categories: string[];
   pricingOptions: Array<{ value: string; label: string }>;
   sortOptions: Array<{ value: string; label: string }>;
   activeFilters: number;
   onClearFilters: () => void;
+  showFavoritesOnly?: boolean;
+  onFavoritesToggle?: () => void;
+  favoritesCount?: number;
 }
 
 export function AdvancedSearch({
@@ -43,11 +50,16 @@ export function AdvancedSearch({
   onPricingChange,
   selectedSort,
   onSortChange,
+  selectedTask,
+  onTaskChange,
   categories,
   pricingOptions,
   sortOptions,
   activeFilters,
   onClearFilters,
+  showFavoritesOnly,
+  onFavoritesToggle,
+  favoritesCount,
 }: AdvancedSearchProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -144,9 +156,28 @@ export function AdvancedSearch({
                   </SelectContent>
                 </Select>
               </div>
+
+              {onTaskChange && selectedTask !== undefined && (
+                <TaskFilter
+                  selectedTask={selectedTask}
+                  onTaskChange={onTaskChange}
+                />
+              )}
             </div>
           </PopoverContent>
         </Popover>
+
+        {/* "只看收藏" 开关 */}
+        {onFavoritesToggle && (
+          <Badge
+            variant={showFavoritesOnly ? "default" : "outline"}
+            className={`cursor-pointer gap-1 ${showFavoritesOnly ? "bg-red-500 hover:bg-red-600" : ""}`}
+            onClick={onFavoritesToggle}
+          >
+            <Heart className={`w-3 h-3 ${showFavoritesOnly ? "fill-white" : ""}`} />
+            {showFavoritesOnly ? "正在看收藏" : `只看收藏${favoritesCount ? ` (${favoritesCount})` : ""}`}
+          </Badge>
+        )}
 
         {/* 快速标签 */}
         <div className="flex flex-wrap gap-2">
@@ -182,6 +213,15 @@ export function AdvancedSearch({
               <X
                 className="h-3 w-3 cursor-pointer"
                 onClick={() => onPricingChange("all")}
+              />
+            </Badge>
+          )}
+          {selectedTask && selectedTask !== "all" && onTaskChange && (
+            <Badge variant="secondary" className="gap-1">
+              {TASK_DEFINITIONS.find(t => t.value === selectedTask)?.icon} {TASK_DEFINITIONS.find(t => t.value === selectedTask)?.label}
+              <X
+                className="h-3 w-3 cursor-pointer"
+                onClick={() => onTaskChange("all")}
               />
             </Badge>
           )}

@@ -1,0 +1,48 @@
+name: Weekly Link Check
+
+on:
+  schedule:
+    # Every Monday at 02:00 UTC
+    - cron: "0 2 * * 1"
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  check-links:
+    name: Check Tool Links
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run link checker
+        run: npm run check:links
+        continue-on-error: true
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: broken-links-report
+          path: reports/broken-links.json
+          retention-days: 30
+
+      - name: Generate summary
+        run: |
+          if [ -f reports/broken-links.json ]; then
+            total=$(node -e "console.log(require('./reports/broken-links.json').total)")
+            broken=$(node -e "console.log(require('./reports/broken-links.json').broken)")
+            echo "## Link Check Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- **Total URLs:** $total" >> $GITHUB_STEP_SUMMARY
+            echo "- **Broken:** $broken" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "See uploaded artifact for full report." >> $GITHUB_STEP_SUMMARY
+          fi

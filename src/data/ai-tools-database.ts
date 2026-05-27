@@ -11,6 +11,18 @@ export interface Tool {
   reviewCount?: number;
   featured?: boolean;
   chineseName?: string;
+  /** Auto-assigned task tags based on category/tags/description */
+  taskTags?: string[];
+  /** Region availability: domestic=国内可用, global=海外, requires-vpn=需科学上网 */
+  region?: 'domestic' | 'global' | 'requires-vpn';
+  /** Supported platforms */
+  platform?: string[];
+  /** User skill level */
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  /** Best use case summary */
+  bestFor?: string;
+  /** Last reviewed date (ISO string) */
+  lastChecked?: string;
 }
 
 export const categories = [

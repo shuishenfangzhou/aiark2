@@ -4,19 +4,18 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toolCategories } from "@/data/comprehensive-tools";
 import { cn } from "@/lib/utils";
+import { comprehensiveTools } from "@/data/comprehensive-tools";
 import { 
   Hash, 
-  Flame, 
+  Search,
   PenTool, 
   Image as ImageIcon, 
   Video, 
   Code2, 
   Briefcase, 
-  Search, 
   Bot, 
   Mic, 
   Palette, 
-  Cpu, 
   GraduationCap, 
   ShieldCheck,
   LayoutGrid,
@@ -34,6 +33,14 @@ interface SidebarProps {
   onCategoryClick: (category: string) => void;
   isCollapsed?: boolean;
 }
+
+// Compute counts per category
+const categoryCounts = toolCategories.reduce((acc, cat) => {
+  acc[cat] = comprehensiveTools.filter(t => t.category === cat).length;
+  return acc;
+}, {} as Record<string, number>);
+
+const totalToolCount = comprehensiveTools.length;
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
@@ -94,40 +101,43 @@ export function Sidebar({ activeCategory, onCategoryClick, isCollapsed = false }
             >
               <LayoutGrid className="w-4 h-4" />
               {!isCollapsed && <span className="ml-3">全部工具</span>}
-              {!isCollapsed && activeCategory === "all" && (
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-blue-400" />
+              {!isCollapsed && (
+                <span className="ml-auto text-xs text-gray-400 dark:text-gray-500">{totalToolCount}</span>
               )}
             </Button>
             
             {!isCollapsed && <div className="my-2 border-t border-gray-100 dark:border-gray-800" />}
             
-            {toolCategories.map((category) => (
-              <Button
-                key={category}
-                variant="ghost"
-                className={cn(
-                  `${isCollapsed ? 'w-10 h-10 p-0 justify-center' : 'w-full justify-start text-left'} font-medium rounded-lg transition-all duration-200 group`,
-                  activeCategory === category 
-                    ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30" 
-                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
-                )}
-                onClick={() => handleCategoryClick(category)}
-                title={isCollapsed ? category : ""}
-              >
-                <span className={cn(
-                  "transition-colors",
-                  activeCategory === category 
-                    ? "text-blue-600 dark:text-blue-400" 
-                    : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"
-                )}>
-                  {getCategoryIcon(category)}
-                </span>
-                {!isCollapsed && <span className="ml-3">{category}</span>}
-                {!isCollapsed && activeCategory === category && (
-                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-blue-400" />
-                )}
-              </Button>
-            ))}
+            {toolCategories.map((category) => {
+              const count = categoryCounts[category] || 0;
+              return (
+                <Button
+                  key={category}
+                  variant="ghost"
+                  className={cn(
+                    `${isCollapsed ? 'w-10 h-10 p-0 justify-center' : 'w-full justify-start text-left'} font-medium rounded-lg transition-all duration-200 group`,
+                    activeCategory === category 
+                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30" 
+                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+                  )}
+                  onClick={() => handleCategoryClick(category)}
+                  title={isCollapsed ? `${category} (${count})` : ""}
+                >
+                  <span className={cn(
+                    "transition-colors",
+                    activeCategory === category 
+                      ? "text-blue-600 dark:text-blue-400" 
+                      : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"
+                  )}>
+                    {getCategoryIcon(category)}
+                  </span>
+                  {!isCollapsed && <span className="ml-3">{category}</span>}
+                  {!isCollapsed && (
+                    <span className="ml-auto text-xs text-gray-400 dark:text-gray-500">{count}</span>
+                  )}
+                </Button>
+              );
+            })}
             
             {!isCollapsed && (
               <>
