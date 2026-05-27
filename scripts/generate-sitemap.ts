@@ -11,7 +11,7 @@ import { comprehensiveTools } from "../src/data/comprehensive-tools";
 import { TASK_DEFINITIONS } from "../src/data/task-definitions";
 import { toolToSlug } from "../src/data/tool-slugs";
 
-const BASE_URL = "https://aiark.vercel.app";
+const BASE_URL = "https://ai-ark.top";
 const DIST_DIR = path.resolve(__dirname, "../dist");
 
 // ═══ XML Builder ═══

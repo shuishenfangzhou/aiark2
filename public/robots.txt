@@ -13,4 +13,4 @@ Disallow: /
 User-agent: Google-Extended
 Disallow: /
 
-Sitemap: https://aiark.vercel.app/sitemap.xml
+Sitemap: https://ai-ark.top/sitemap.xml

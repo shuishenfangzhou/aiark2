@@ -3,7 +3,7 @@
  * Handles: page title, meta description, canonical, Open Graph, JSON-LD.
  */
 
-export const SITE_URL = "https://aiark.vercel.app";
+export const SITE_URL = "https://ai-ark.top";
 export const SITE_NAME = "AI Ark";
 export const SITE_DESCRIPTION = "发现最全面的 AI 工具导航，涵盖 500+ 精选工具，16+ 分类，智能推荐帮你快速找到最适合的 AI 工具。";
 export const SITE_DEFAULT_TITLE = "AI 工具导航 — 发现最全面的 AI 工具";
