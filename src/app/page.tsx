@@ -47,21 +47,31 @@ export default function Home() {
     setPageMeta({
       title: SITE_DEFAULT_TITLE,
       description: SITE_DESCRIPTION,
-      jsonLd: {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        name: SITE_NAME,
-        url: window.location.origin,
-        description: SITE_DESCRIPTION,
-        potentialAction: {
-          "@type": "SearchAction",
-          target: {
-            "@type": "EntryPoint",
-            urlTemplate: `${window.location.origin}/?search={search_term_string}`,
+      jsonLd: [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: SITE_NAME,
+          url: window.location.origin,
+          description: SITE_DESCRIPTION,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: `${window.location.origin}/?search={search_term_string}`,
+            },
+            "query-input": "required name=search_term_string",
           },
-          "query-input": "required name=search_term_string",
         },
-      },
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: SITE_NAME,
+          url: window.location.origin,
+          description: SITE_DESCRIPTION,
+          logo: `${window.location.origin}/icons/icon-512.svg`,
+        },
+      ],
     });
   }, []);
 
