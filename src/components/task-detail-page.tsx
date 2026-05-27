@@ -12,6 +12,11 @@ import { useCompare } from "@/lib/compare-context";
 import {
   getTaskIntro,
   getTaskToolCount,
+  getFeaturedToolsForTask,
+  getRelatedTasks,
+  getTaskSelectionTips,
+  getTaskWorkflow,
+  getTaskFAQ,
 } from "@/lib/task-insights";
 import { setPageMeta } from "@/lib/seo";
 

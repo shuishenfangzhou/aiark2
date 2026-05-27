@@ -194,7 +194,7 @@ export function ToolCard({ tool }: ToolCardProps) {
           variant="default"
           size="sm"
           className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-sm hover:shadow-md transition-all duration-200"
-          onClick={(e) => { e.stopPropagation(); window.open(tool.url, '_blank', 'noopener', 'noreferrer'); }}
+          onClick={(e) => { e.stopPropagation(); window.open(tool.url, '_blank', 'noopener,noreferrer'); }}
         >
           <ExternalLink className="w-3.5 h-3.5 mr-2" />
           访问官网

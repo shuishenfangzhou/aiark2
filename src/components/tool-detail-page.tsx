@@ -94,7 +94,7 @@ export function ToolDetailPage() {
                 }
               : undefined,
           url: window.location.href,
-          image: tool.image || undefined,
+          image: tool.icon || undefined,
         },
       });
     }

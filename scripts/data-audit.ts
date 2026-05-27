@@ -93,7 +93,7 @@ function runAudit(): {
 
   // ── Check each tool ──
   for (const tool of comprehensiveTools) {
-    const t = tool as { [key: string]: unknown; name?: string; id?: string; description?: string; pricing?: string; region?: string; difficulty?: string; bestFor?: string; lastChecked?: string; tags?: string[]; url?: string; platform?: string[]; category?: string; taskTags?: string[]; rating?: number; featured?: boolean };
+    const t = tool as unknown as { [key: string]: unknown; name?: string; id?: string; description?: string; pricing?: string; region?: string; difficulty?: string; bestFor?: string; lastChecked?: string; tags?: string[]; url?: string; platform?: string[]; category?: string; taskTags?: string[]; rating?: number; featured?: boolean };
     const name = t.name ?? "(unnamed)";
     const id = t.id ?? "(no-id)";
 
@@ -269,15 +269,17 @@ function runAudit(): {
   const urlMap = new Map<string, string[]>();
 
   for (const tool of comprehensiveTools) {
-    const t = tool as Record<string, unknown>;
-    const key = typeof t.name === "string" ? t.name.toLowerCase().trim() : "";
+    const t = tool as unknown as Record<string, unknown>;
+    const rawName = t.name;
+    const key = typeof rawName === "string" ? rawName.toLowerCase().trim() : "";
     if (key) {
       const ids = nameMap.get(key) ?? [];
-      ids.push(`${t.id}:${t.name}`);
+      ids.push(`${String(t.id ?? "")}:${String(t.name ?? "")}`);
       nameMap.set(key, ids);
     }
-    if (t.url) {
-      const uKey = t.url.toLowerCase().trim().replace(/\/$/, "");
+    const rawUrl = t.url;
+    if (typeof rawUrl === "string") {
+      const uKey = rawUrl.toLowerCase().trim().replace(/\/$/, "");
       const ids = urlMap.get(uKey) ?? [];
       ids.push(`${t.id}:${t.name}`);
       urlMap.set(uKey, ids);

@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowRight, RefreshCw, Check, Sparkles, Heart, BarChart3, Ex
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { QUIZ_QUESTIONS, getRecommendation, type QuizAnswers } from "@/data/quiz-recommendations";
+import { QUIZ_QUESTIONS, getRecommendation, type QuizAnswers, type QuizOption } from "@/data/quiz-recommendations";
 import { getTaskLabel, TASK_DEFINITIONS } from "@/data/task-definitions";
 import { useFavorites } from "@/lib/favorites-context";
 import { useCompare } from "@/lib/compare-context";
@@ -41,7 +41,7 @@ export function QuizPage() {
     ? 0
     : step === "results"
       ? 100
-      : ((step + 1) / STEP_TOTAL) * 100;
+      : (((step as number) + 1) / STEP_TOTAL) * 100;
 
   const handleSelect = (questionId: string, value: string) => {
     const newAnswers = { ...answers, [questionId]: value };
@@ -53,7 +53,7 @@ export function QuizPage() {
       setResult(rec);
       setStep("results");
     } else {
-      setStep((step + 1) as Step);
+      setStep(((step as number) + 1) as Step);
     }
   };
 
@@ -288,7 +288,7 @@ export function QuizPage() {
   }
 
   // ─── Quiz Steps ──────────────────────────────────────────
-  const question = QUIZ_QUESTIONS[step];
+  const question = QUIZ_QUESTIONS[step as number];
   const taskIcon = question.id === "task"
     ? TASK_DEFINITIONS.find(t => t.value === answers.task)?.icon
     : undefined;
@@ -300,14 +300,14 @@ export function QuizPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <button
-              onClick={() => step > 0 ? setStep((step - 1) as Step) : setStep("welcome")}
+              onClick={() => (step as number) > 0 ? setStep(((step as number) - 1) as Step) : setStep("welcome")}
               className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               返回
             </button>
             <span className="text-sm text-gray-500">
-              {step + 1} / {STEP_TOTAL}
+              {(step as number) + 1} / {STEP_TOTAL}
             </span>
           </div>
           <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -323,7 +323,7 @@ export function QuizPage() {
           <Card className="border-gray-200 dark:border-gray-800 shadow-lg">
             <CardHeader className="pb-2">
               <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-1">
-                第 {step + 1} 题
+                第 {(step as number) + 1} 题
               </p>
               <CardTitle className="text-2xl text-gray-900 dark:text-gray-100 flex items-center gap-2">
                 {taskIcon && <span>{taskIcon}</span>}
@@ -332,7 +332,7 @@ export function QuizPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3 mt-2">
-                {question.options.map((option) => {
+                {question.options.map((option: QuizOption) => {
                   const selected = answers[question.id as keyof QuizAnswers] === option.value;
                   return (
                     <button
