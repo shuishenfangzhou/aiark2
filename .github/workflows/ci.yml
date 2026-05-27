@@ -55,8 +55,11 @@ jobs:
       - name: Build client
         run: npm run build:client
 
+      - name: Install xvfb
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb
+
       - name: Run Lighthouse CI
-        run: npx @lhci/cli autorun
+        run: xvfb-run --auto-servernum npx @lhci/cli autorun
         continue-on-error: true
 
       - name: Upload Lighthouse reports
