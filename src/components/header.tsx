@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Search, Sun, Moon, PanelLeft, ArrowUp } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { MobileSidebar } from "@/components/mobile-sidebar";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +25,8 @@ export function Header({ searchQuery, onSearchChange, activeCategory, onCategory
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const raf = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   useEffect(() => {
@@ -70,14 +72,14 @@ export function Header({ searchQuery, onSearchChange, activeCategory, onCategory
               >
                 <PanelLeft className="w-5 h-5" />
               </Button>
-              <a href="/" className="flex items-center gap-2 group">
+              <Link to="/" className="flex items-center gap-2 group">
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
                   <span className="text-white font-bold text-sm">AI</span>
                 </div>
                 <span className="text-lg font-bold text-gray-900 dark:text-gray-100 hidden sm:block">
                   AI 工具导航
                 </span>
-              </a>
+              </Link>
             </div>
 
             <div className="flex items-center gap-3 flex-1 max-w-xl">

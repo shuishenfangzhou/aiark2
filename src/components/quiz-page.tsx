@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { setPageMeta } from "@/lib/seo";
 import { ArrowLeft, ArrowRight, RefreshCw, Check, Sparkles, Heart, BarChart3, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { QUIZ_QUESTIONS, getRecommendation, type QuizAnswers, type RecommendedTool } from "@/data/quiz-recommendations";
+import { QUIZ_QUESTIONS, getRecommendation, type QuizAnswers } from "@/data/quiz-recommendations";
 import { getTaskLabel, TASK_DEFINITIONS } from "@/data/task-definitions";
 import { useFavorites } from "@/lib/favorites-context";
 import { useCompare } from "@/lib/compare-context";
@@ -17,6 +18,13 @@ const STEP_TOTAL = 4;
 
 export function QuizPage() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setPageMeta({
+      title: "AI 工具测评 — 30 秒找到最适合你的 AI 工具 — AI Ark",
+      description: "回答 4 个简单问题，获得个性化 AI 工具推荐。根据你的任务类型、经验水平、预算和网络环境，智能匹配最佳工具。",
+    });
+  }, []);
   const { isFavorite, toggleFavorite } = useFavorites();
   const { isCompared, toggleCompare } = useCompare();
 

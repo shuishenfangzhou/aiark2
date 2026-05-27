@@ -1,12 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
-import { X, ExternalLink, BarChart3 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { X, ExternalLink, BarChart3, Eye } from "lucide-react";
 import { comprehensiveTools } from "@/data/comprehensive-tools";
 import { useCompare } from "@/lib/compare-context";
 
 export function CompareBar() {
-  const { compareIds, toggleCompare, clearCompare, compareCount } = useCompare();
+  const navigate = useNavigate();
+  const { compareIds, toggleCompare, clearCompare } = useCompare();
 
   const tools = useMemo(
     () => compareIds.map(id => comprehensiveTools.find(t => t.id === id)).filter(Boolean),
@@ -43,6 +45,15 @@ export function CompareBar() {
             >
               清空对比
             </button>
+            {compareIds.length >= 2 && (
+              <button
+                onClick={() => navigate("/compare")}
+                className="flex items-center gap-1 text-xs px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition-colors"
+              >
+                <Eye className="w-3 h-3" />
+                查看详细对比
+              </button>
+            )}
           </div>
         </div>
 

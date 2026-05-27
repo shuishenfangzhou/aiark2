@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { setPageMeta } from "@/lib/seo";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -57,6 +58,13 @@ const REGION_OPTIONS = [
 
 export function SubmitToolPage() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setPageMeta({
+      title: "提交 AI 工具 — AI Ark",
+      description: "推荐你发现的好用 AI 工具，帮助更多人找到适合的工具。提交后我们会审核并收录到 AI Ark 导航站。",
+    });
+  }, []);
   const [form, setForm] = useState<FormData>(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);

@@ -18,7 +18,9 @@ export function Hero() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setMounted(true);
+    // Delay mount animation by one frame to avoid cascading renders
+    const raf = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   const handleTaskClick = (taskValue: string) => {

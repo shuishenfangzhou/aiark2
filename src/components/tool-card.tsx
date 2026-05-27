@@ -4,14 +4,13 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Star, Users, Heart, Share2, BarChart3 } from "lucide-react";
+import { ExternalLink, Star, Users, Heart, Share2, BarChart3, Globe } from "lucide-react";
 import { Tool } from "@/data/comprehensive-tools";
 import { TASK_DEFINITIONS } from "@/data/task-definitions";
 import { toolToSlug } from "@/data/tool-slugs";
 import { useFavorites } from "@/lib/favorites-context";
 import { useCompare } from "@/lib/compare-context";
 import { useNavigate } from "react-router-dom";
-import { Globe, Smartphone, Star } from "lucide-react";
 
 interface ToolCardProps {
   tool: Tool;

@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { TaskFilter } from "@/components/task-filter";
-import { TASK_DEFINITIONS, getTaskLabel } from "@/data/task-definitions";
+import { SearchAutocomplete } from "@/components/search-autocomplete";
+import { TASK_DEFINITIONS } from "@/data/task-definitions";
 
 interface AdvancedSearchProps {
   searchQuery: string;
@@ -39,6 +40,7 @@ interface AdvancedSearchProps {
   showFavoritesOnly?: boolean;
   onFavoritesToggle?: () => void;
   favoritesCount?: number;
+  resultsCount?: number;
 }
 
 export function AdvancedSearch({
@@ -67,13 +69,22 @@ export function AdvancedSearch({
     <div className="w-full space-y-4">
       {/* 主要搜索栏 */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 pointer-events-none z-10" />
         <Input
+          id="advanced-search-input"
           type="text"
           placeholder="搜索AI工具... (支持中文搜索)"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="pl-10 pr-4 py-6 text-lg border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+        />
+        <SearchAutocomplete
+          query={searchQuery}
+          onQueryChange={onSearchChange}
+          onSelectTask={(task) => onTaskChange?.(task)}
+          onSelectCategory={(cat) => onCategoryChange(cat)}
+          inputId="advanced-search-input"
+          showHotSearch={true}
         />
       </div>
 

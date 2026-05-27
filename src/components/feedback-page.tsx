@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { setPageMeta } from "@/lib/seo";
 
 interface FormData {
   type: string;
@@ -31,6 +32,13 @@ const FEEDBACK_TYPES = [
 
 export function FeedbackPage() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setPageMeta({
+      title: "意见反馈 — AI Ark",
+      description: "发现链接失效、信息错误或价格变化？告诉我们，一起维护最准确的 AI 工具导航。",
+    });
+  }, []);
   const [searchParams] = useSearchParams();
   const [form, setForm] = useState<FormData>(initialForm);
   const [submitted, setSubmitted] = useState(false);
@@ -40,8 +48,13 @@ export function FeedbackPage() {
   useEffect(() => {
     const tool = searchParams.get("tool");
     const url = searchParams.get("url");
-    if (tool) setForm((prev) => ({ ...prev, toolName: tool }));
-    if (url) setForm((prev) => ({ ...prev, toolUrl: url }));
+    if (tool || url) {
+      // Use a microtask to batch the state update and avoid cascading renders
+      queueMicrotask(() => {
+        if (tool) setForm((prev) => ({ ...prev, toolName: tool }));
+        if (url) setForm((prev) => ({ ...prev, toolUrl: url }));
+      });
+    }
   }, [searchParams]);
 
   const update = (field: keyof FormData, value: string) =>

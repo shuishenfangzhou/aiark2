@@ -1,12 +1,16 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
 import { ToolCard } from "@/components/tool-card";
 import { comprehensiveTools, toolCategories, pricingOptions, sortOptions } from "@/data/comprehensive-tools";
 import { filterByTask, getTaskLabel, TASK_VALUES, TASK_DEFINITIONS } from "@/data/task-definitions";
+import { searchTools, getSearchExplanation, HOT_SEARCH_TERMS } from "@/lib/search-engine";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { Hero } from "@/components/hero";
 import { NewsSection } from "@/components/news-section";
@@ -16,8 +20,11 @@ import { FeaturedTools } from "@/components/featured-tools";
 import { AdvancedSearch } from "@/components/advanced-search";
 import { CompareBar } from "@/components/compare-bar";
 import { useFavorites } from "@/lib/favorites-context";
+import { setPageMeta, SITE_DEFAULT_TITLE, SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   // Initialize task from URL search params (native, no Next.js dependency)
   const getInitialTask = (): string => {
     if (typeof window === "undefined") return "all";
@@ -34,6 +41,29 @@ export default function Home() {
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [selectedTask, setSelectedTask] = useState(getInitialTask);
   const { isFavorite, favoritesCount } = useFavorites();
+
+  // SEO meta
+  useEffect(() => {
+    setPageMeta({
+      title: SITE_DEFAULT_TITLE,
+      description: SITE_DESCRIPTION,
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: SITE_NAME,
+        url: window.location.origin,
+        description: SITE_DESCRIPTION,
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${window.location.origin}/?search={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
+      },
+    });
+  }, []);
 
   // Listen for task-select events from Hero buttons
   useEffect(() => {
@@ -73,17 +103,6 @@ export default function Home() {
       result = result.filter(tool => isFavorite(tool.id));
     }
 
-    // 搜索过滤
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(tool => 
-        tool.name.toLowerCase().includes(query) ||
-        tool.chineseName?.toLowerCase().includes(query) ||
-        tool.description.toLowerCase().includes(query) ||
-        tool.tags.some(tag => tag.toLowerCase().includes(query))
-      );
-    }
-
     // 分类过滤
     if (activeCategory !== "all") {
       result = result.filter(tool => tool.category === activeCategory);
@@ -94,19 +113,35 @@ export default function Home() {
       result = result.filter(tool => tool.pricing === selectedPricing);
     }
 
-    // 排序逻辑
-    switch (selectedSort) {
-      case "rating":
+    // 搜索过滤 + 权重排序
+    if (searchQuery) {
+      const scored = searchTools(searchQuery, result);
+      result = scored.map(s => s.tool);
+
+      // If user explicitly chose a sort, apply it on top of search results
+      if (selectedSort === "rating") {
         result = [...result].sort((a, b) => (b.rating || 0) - (a.rating || 0));
-        break;
-      case "newest":
+      } else if (selectedSort === "newest") {
         result = [...result].sort((a, b) => parseInt(b.id) - parseInt(a.id));
-        break;
-      case "popular":
+      } else if (selectedSort === "popular") {
         result = [...result].sort((a, b) => (b.reviewCount || 0) - (a.reviewCount || 0));
-        break;
-      default: // featured
-        result = [...result].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+      }
+      // When sort is "featured" (default), keep search score ordering
+    } else {
+      // 排序逻辑（无搜索时）
+      switch (selectedSort) {
+        case "rating":
+          result = [...result].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+          break;
+        case "newest":
+          result = [...result].sort((a, b) => parseInt(b.id) - parseInt(a.id));
+          break;
+        case "popular":
+          result = [...result].sort((a, b) => (b.reviewCount || 0) - (a.reviewCount || 0));
+          break;
+        default: // featured
+          result = [...result].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+      }
     }
 
     return result;
@@ -137,6 +172,12 @@ export default function Home() {
   };
 
   const isDefaultView = searchQuery === "" && activeCategory === "all" && selectedPricing === "all" && !favoritesOnly && selectedTask === "all";
+
+  // Search explanation text
+  const searchExplanation = useMemo(() => {
+    if (!searchQuery) return "";
+    return getSearchExplanation(searchQuery, filteredTools.length);
+  }, [searchQuery, filteredTools.length]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -194,6 +235,7 @@ export default function Home() {
                 showFavoritesOnly={favoritesOnly}
                 onFavoritesToggle={toggleFavoritesOnly}
                 favoritesCount={favoritesCount}
+                resultsCount={searchQuery ? filteredTools.length : undefined}
               />
             </div>
 
@@ -258,6 +300,14 @@ export default function Home() {
                       ({filteredTools.length})
                     </span>
                   </h2>
+
+                  {/* Search explanation */}
+                  {searchExplanation && filteredTools.length > 0 && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 px-1">
+                      {searchExplanation}
+                    </p>
+                  )}
+
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredTools.map(tool => (
                       <ToolCard key={tool.id} tool={tool} />
@@ -267,19 +317,48 @@ export default function Home() {
               )}
               
               {filteredTools.length === 0 && (
-                <div className="text-center py-12 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <p className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                    未找到相关工具
-                  </p>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    请尝试调整搜索关键词或筛选条件。
-                  </p>
-                  <button 
-                    onClick={clearFilters}
-                    className="mt-4 text-blue-500 hover:underline"
-                  >
-                    清除所有筛选
-                  </button>
+                <div className="text-center py-16 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
+                  <div className="max-w-sm mx-auto">
+                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Search className="w-7 h-7 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                      没有找到相关工具
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                      请尝试调整搜索关键词或筛选条件。
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                      <Button variant="outline" size="sm" onClick={clearFilters}>
+                        清空搜索
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => navigate("/submit")}>
+                        提交工具
+                      </Button>
+                      <Button size="sm" onClick={() => navigate("/quiz")}>
+                        查看热门任务
+                      </Button>
+                    </div>
+                    {searchQuery && (
+                      <>
+                        <p className="text-xs text-gray-400 mt-6 mb-3">热门搜索</p>
+                        <div className="flex flex-wrap justify-center gap-2">
+                          {HOT_SEARCH_TERMS.map((term) => (
+                            <button
+                              key={term}
+                              onClick={() => setSearchQuery(term)}
+                              className="px-3 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 
+                                text-gray-600 dark:text-gray-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 
+                                hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-200 dark:hover:border-blue-700 
+                                transition-colors"
+                            >
+                              {term}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
