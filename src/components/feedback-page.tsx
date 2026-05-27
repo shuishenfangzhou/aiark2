@@ -64,8 +64,22 @@ export function FeedbackPage() {
     e.preventDefault();
     setSubmitting(true);
 
-    console.log("[Feedback] New feedback submission:", form);
-    await new Promise((r) => setTimeout(r, 800));
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Submit failed");
+      }
+    } catch (err) {
+      console.error("[Feedback] Submit error:", err);
+      setSubmitting(false);
+      return;
+    }
 
     setSubmitting(false);
     setSubmitted(true);

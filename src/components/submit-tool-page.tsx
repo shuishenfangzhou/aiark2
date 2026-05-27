@@ -76,9 +76,22 @@ export function SubmitToolPage() {
     e.preventDefault();
     setSubmitting(true);
 
-    // Simulate submission — replace with Formspree / API call later
-    console.log("[SubmitTool] New tool submission:", form);
-    await new Promise((r) => setTimeout(r, 800));
+    try {
+      const res = await fetch("/api/submit-tool", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Submit failed");
+      }
+    } catch (err) {
+      console.error("[SubmitTool] Submit error:", err);
+      setSubmitting(false);
+      return;
+    }
 
     setSubmitting(false);
     setSubmitted(true);
