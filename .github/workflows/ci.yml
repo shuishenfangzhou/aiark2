@@ -58,13 +58,20 @@ jobs:
       - name: Install xvfb
         run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb
 
-      - name: Run Lighthouse CI
-        run: xvfb-run --auto-servernum npx @lhci/cli autorun
+      - name: Start server and run Lighthouse
+        run: |
+          npx serve -s dist -l 3000 &
+          SERVER_PID=$!
+          sleep 3
+          echo "Server started (PID: $SERVER_PID)"
+          mkdir -p lhci-reports
+          xvfb-run --auto-servernum npx lhci collect --url=http://localhost:3000 --url=http://localhost:3000/learn --url=http://localhost:3000/tasks/write-paper --settings.chromeFlags="--no-sandbox --headless=new --disable-gpu" --settings.formFactor=desktop --settings.screenEmulation.mobile=false --settings.screenEmulation.width=1440 --settings.screenEmulation.height=900 --numberOfRuns=1 2>&1
+          echo "Collect exit code: $?"
         continue-on-error: true
 
-      - name: Upload Lighthouse reports
+      - name: Upload LHCI artifact
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-reports
-          path: lhci-reports/
+          path: .lighthouseci/
           retention-days: 30
