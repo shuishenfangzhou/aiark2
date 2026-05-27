@@ -12,11 +12,21 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
+        manualChunks(id) {
           // Split vendor libraries into separate chunks
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-ui': ['lucide-react', 'class-variance-authority', 'clsx', 'tailwind-merge'],
-          'vendor-radix': ['radix-ui'],
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/') || id.includes('node_modules/scheduler/')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/lucide-react') || id.includes('node_modules/class-variance-authority') || id.includes('node_modules/clsx') || id.includes('node_modules/tailwind-merge')) {
+            return 'vendor-ui';
+          }
+          if (id.includes('node_modules/radix-ui') || id.includes('node_modules/@radix-ui')) {
+            return 'vendor-radix';
+          }
+          // Split the large tool data into its own chunk
+          if (id.includes('/data/ai-tools-database') || id.includes('/data/comprehensive-tools')) {
+            return 'vendor-data';
+          }
         },
       },
     },
